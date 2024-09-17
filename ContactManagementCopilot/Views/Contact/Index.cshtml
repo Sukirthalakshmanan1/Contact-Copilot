@@ -1,0 +1,45 @@
+@model IEnumerable<ContactDetails>
+
+<h2>Contact List</h2>
+<p>
+    @Html.ActionLink("Create New Contact details", "Create", null, new { @class = "btn btn-success" })
+</p>
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<table class="table">
+        <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Address details</th>
+    </tr>
+
+
+    @foreach (var contact in Model)
+    {
+        <tr>
+            <td>@contact.Firstname</td>
+            <td>@contact.Lastname</td>
+            <td>@contact.Email</td>
+            <td>@contact.Phone</td>
+            <td>@contact.Address</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = contact.Id }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Delete", "Delete", new { id = contact.Id }, new { @class = "btn btn-danger" })
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,82 @@
+
+
+@model ContactDetails
+
+<h2>Edit Contact</h2>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+@if (!string.IsNullOrEmpty(ViewBag.SuccessMessage))
+{
+    <div class="alert alert-success">
+        @ViewBag.SuccessMessage
+    </div>
+}
+<form asp-page="/Edit" method="post">
+ @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label asp-for="Firstname"></label>
+        <input asp-for="Firstname" class="form-control" minlength="2" maxlength="50" required />
+        <span asp-validation-for="Firstname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Lastname"></label>
+        <input asp-for="Lastname" class="form-control" minlength="1" maxlength="50" required />
+        <span asp-validation-for="Lastname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" type="email" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" pattern="\d{10}" title="Please enter a 10-digit phone number" required />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" required />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <br>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Save</button>
+        @Html.ActionLink("Back to List", "Index", "Contact", null, new { @class = "btn btn-primary" })
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('form').on('keyup change', 'input, select, textarea', function () {
+                var field = $(this);
+                var form = field.closest('form');
+                
+                $.validator.unobtrusive.parseElement(this);
+                
+                if ($(this).valid()) {
+                    var errorSpan = form.find("[data-valmsg-for='" + field.attr('name') + "']");
+                    errorSpan.text('').removeClass('field-validation-error').addClass('field-validation-valid');
+                    
+                    // Remove the field from the validation summary
+                    var summary = form.find('.validation-summary-errors, .validation-summary-valid');
+                    summary.find("li:contains('" + field.attr('name') + "')").remove();
+                    
+                    // If no more errors, hide the summary
+                    if (summary.find('li').length === 0) {
+                        summary.remove();
+                    }
+                }
+            });
+        });
+    </script>
+}
+
